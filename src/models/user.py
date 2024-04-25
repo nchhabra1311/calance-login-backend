@@ -15,6 +15,8 @@ class User(Document):
       email = StringField(required=True, unique=True)
       display_name = StringField(required=True)
       created_at = DateTimeField(default=datetime.now, required=True)
+      first_login_at = DateTimeField(default=datetime.now)
+      last_login_at = DateTimeField()
 
       meta = {
             'collection': 'users'
