@@ -1,6 +1,6 @@
 import logging
-from flask import request, abort
-from src.services import UserService
+from flask import request, abort, jsonify
+from services import UserService
 
 logger = logging.getLogger("default")
 user_service = UserService()
@@ -21,12 +21,12 @@ def login():
     # Extract username and password from request
     data = request.json
     try:
-        username = data.get('username')
-        password = data.get('password')
+        username = data['username']
+        password = data['password']
     except KeyError as e:
-        abort(400, e.args)
+        return jsonify({"error": f"{e.args[0]} is mandatory"}), 400
 
-    return UserService.login_user(username, password)
+    return user_service.login_user(username, password)
 
 def register_user():
     """
@@ -34,12 +34,13 @@ def register_user():
     """
     data = request.json
     try:
-        username = data.get('username')
-        password = data.get('password')
-        display_name = data.get('display_name')
-        email = data.get('email')
+        username = data['username']
+        password = data['password']
+        display_name = data['display_name']
+        email = data['email']
 
     except KeyError as e:
-        abort(400, e.args)
+        return jsonify({"error": f"{e.args[0]} is mandatory"}), 400
 
-    return UserService.register_user(username, password, email, display_name)
+
+    return user_service.register_user(username, password, email, display_name)
